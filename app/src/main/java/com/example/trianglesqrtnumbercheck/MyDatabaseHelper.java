@@ -20,6 +20,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE = "CREATE TABLE "+TABLE_NAME+ " ( " +_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+NUMBER+" INTEGER, "+TYPE+" VARCHAR(255)); ";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String SELECT_ALL = "SELECT * FROM "+TABLE_NAME;
+    private static final String LAST_FIVE_DATA = "SELECT * FROM "+TABLE_NAME+" ORDER BY "+_ID+" DESC LIMIT 5";
 
     private final Context context;
     public MyDatabaseHelper(@Nullable Context context) {
@@ -59,9 +60,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long rowId = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         return rowId;
     }
-    public Cursor displayData(){
+    public Cursor displayAllData(){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery(SELECT_ALL, null);
+        Cursor cursor = sqLiteDatabase.rawQuery(LAST_FIVE_DATA, null);
         return cursor;
     }
 }

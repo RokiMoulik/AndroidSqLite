@@ -6,37 +6,42 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ShowHistory extends AppCompatActivity {
-    RecyclerView recyclerView;
-    ArrayList<Integer> _number = new ArrayList<>();
-    ArrayList<String> _type = new ArrayList<>();
-    MyDatabaseHelper myDatabaseHelper;
+    private MyDatabaseHelper myDatabaseHelper;
+    private ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_history);
-        recyclerView = findViewById(R.id.recylerviewId);
 
-        myDatabaseHelper = new MyDatabaseHelper(this);
-        CustomAdapter customAdapter = new CustomAdapter(this, _number, _type);
-        recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ShowHistory.this));
+        listView =  findViewById(R.id.listViewId);
+        myDatabaseHelper = new MyDatabaseHelper(ShowHistory.this);
 
+        displayData();
+    }
 
-        Cursor cursor = myDatabaseHelper.displayData();
+    public void displayData(){
+        ArrayList<String>listData = new ArrayList<>();
+
+        Cursor cursor = myDatabaseHelper.displayAllData();
+
         if(cursor.getCount() == 0){
-            Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No data in the database", Toast.LENGTH_SHORT).show();
         }
         else{
             while(cursor.moveToNext()){
-                _number.add(cursor.getInt(1));
-                _type.add(cursor.getString(2));
+                listData.add(cursor.getString(1) + " \t " + cursor.getString(2));
             }
         }
 
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.single_item, R.id.textViewId, listData);
+        listView.setAdapter(arrayAdapter);
+       // listView.setOnItemClickListener(listView.getOnItemClickListener());
     }
 }
