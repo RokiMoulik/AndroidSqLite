@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -42,6 +44,12 @@ public class ShowHistory extends AppCompatActivity {
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.single_item, R.id.textViewId, listData);
         listView.setAdapter(arrayAdapter);
-       // listView.setOnItemClickListener(listView.getOnItemClickListener());
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), "Item: "+position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
